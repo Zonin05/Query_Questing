@@ -1,0 +1,22 @@
+-- Retrieve All Books
+SELECT * FROM Books;
+
+-- Retrieve All Authors
+SELECT * FROM Authors;
+
+-- Retrieve All Genres
+SELECT * FROM Genres;
+
+-- Join Query to Fetch All Books by a Particular Author
+SELECT Books.title
+FROM Books
+JOIN Book_Author ON Books.book_id = Book_Author.book_id
+JOIN Authors ON Book_Author.author_id = Authors.author_id
+WHERE Authors.first_name = 'George' AND Authors.last_name = 'Orwell';
+
+-- Join Query to Fetch All Books in a Particular Genre
+SELECT Books.title
+FROM Books
+JOIN Book_Genre ON Books.book_id = Book_Genre.book_id
+JOIN Genres ON Book_Genre.genre_id = Genres.genre_id
+WHERE Genres.genre_name = 'Dystopian';

@@ -1,0 +1,53 @@
+-- 1. List all products
+SELECT * FROM Products;
+
+-- 2. Retrieve details of orders with product information
+SELECT Orders.order_id, Orders.order_date, Products.product_name, Order_Items.quantity, Order_Items.price 
+FROM Orders
+JOIN Order_Items ON Orders.order_id = Order_Items.order_id
+JOIN Products ON Order_Items.product_id = Products.product_id;
+
+-- 3. Search for products by name (e.g., 'Laptop')
+SELECT * FROM Products WHERE product_name LIKE '%Laptop%';
+
+-- 4. Check the availability of products in inventory
+SELECT Products.product_name, Inventory.stock_level
+FROM Products
+JOIN Inventory ON Products.product_id = Inventory.product_id;
+
+-- 5. Retrieve the current status of orders along with payment and shipping details
+SELECT Orders.order_id, Orders.status, Payments.payment_status, Shipping.shipping_method
+FROM Orders
+JOIN Payments ON Orders.order_id = Payments.order_id
+JOIN Shipping ON Orders.order_id = Shipping.order_id;
+
+-- 6. Retrieve reviews for a specific product (e.g., 'Laptop')
+SELECT Reviews.rating, Reviews.review_text
+FROM Reviews
+JOIN Products ON Reviews.product_id = Products.product_id
+WHERE Products.product_name = 'Laptop';
+
+-- 7. Get total revenue for each product
+SELECT Products.product_name, SUM(Order_Items.quantity * Order_Items.price) AS total_revenue
+FROM Order_Items
+JOIN Products ON Order_Items.product_id = Products.product_id
+GROUP BY Products.product_name;
+
+-- 8. Get the number of orders placed by each customer
+SELECT Customers.first_name, Customers.last_name, COUNT(Orders.order_id) AS order_count
+FROM Orders
+JOIN Customers ON Orders.customer_id = Customers.customer_id
+GROUP BY Customers.customer_id;
+
+-- 9. List all orders that have been shipped, along with their shipping details
+SELECT Orders.order_id, Orders.order_date, Shipping.shipping_method, Shipping.tracking_number, Shipping.delivery_date
+FROM Orders
+JOIN Shipping ON Orders.order_id = Shipping.order_id
+WHERE Orders.status = 'Shipped';
+
+-- 10. Find products that have a rating of 4 or higher and display their details
+SELECT Products.product_name, AVG(Reviews.rating) AS average_rating, Products.price
+FROM Reviews
+JOIN Products ON Reviews.product_id = Products.product_id
+GROUP BY Products.product_id
+HAVING AVG(Reviews.rating) >= 4;
